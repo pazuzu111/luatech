@@ -18,18 +18,21 @@ export default class App extends Component {
     componentDidMount() {
 
         //get users from github
-        // this.getUsers()
+        this.getUsers()
         // this.loggedIn()
     }
 
-    // getUsers = async() => {
+    getUsers = async() => {
 
-    //     let response = await fetch(`https://api.github.com/users?since=1&per_page=10`)
-    //     const users = await response.json();
+        //make get request to github api to fetch list of users
+        let response = await fetch(`https://api.github.com/users?since=1&per_page=10`)
 
-    //     this.setState({users: users}, console.log(users))
+        //convert to json
+        const users = await response.json();
 
-    // }
+        //set state with the acquired data
+        this.setState({users: users}, console.log(users))
+    }
 
     // loggedIn = () => {
     //     if(/code=/.test(window.location.href))
@@ -66,20 +69,21 @@ export default class App extends Component {
 
     render() {
 
-        // let output = this.state.users?
-        //     this.state.users.map(x => {
-        //         return(
-        //            <div key={x.id}>
-        //                 <User username={x.login} image={x.avatar_url} auth={this.state.userToken} />
-        //             </div>
-        //         )
-        //     })
-        //     :
-        //     null
+        let output = this.state.users?
+            this.state.users.map(x => {
+                return(
+                   <div key={x.id}>
+                        <User username={x.login} image={x.avatar_url} auth={this.state.userToken} />
+                    </div>
+                )
+            })
+            :
+            null
 
         return (
             <div className="App">
                 // <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3"> login </a>
+                {output}
             </div>
         )
     }
