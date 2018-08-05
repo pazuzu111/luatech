@@ -1,81 +1,115 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
+// import React from 'react';
+// import PropTypes from 'prop-types';
+// import { withStyles } from '@material-ui/core/styles';
+// import Typography from '@material-ui/core/Typography';
+// import Modal from '@material-ui/core/Modal';
+// import Button from '@material-ui/core/Button';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
+// function rand() {
+//   return Math.round(Math.random() * 20) - 10;
+// }
 
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+// function getModalStyle() {
+//   const top = 50 + rand();
+//   const left = 50 + rand();
 
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+//   return {
+//     top: `${top}%`,
+//     left: `${left}%`,
+//     transform: `translate(-${top}%, -${left}%)`,
+//   };
+// }
 
-const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-  },
-});
+// const styles = theme => ({
+//   paper: {
+//     position: 'absolute',
+//     width: theme.spacing.unit * 50,
+//     backgroundColor: theme.palette.background.paper,
+//     boxShadow: theme.shadows[5],
+//     padding: theme.spacing.unit * 4,
+//   },
+// });
 
-class SimpleModal extends React.Component {
-  state = {
-    open: false,
-  };
+// class User extends React.Component {
+//     constructor(props) {
+//         super(props)
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
+//         this.state = {
+//             open: false,
+//             user: null,
+//             userRepos: null
+//         };
+//     }
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+//     handleOpen = async userLogin => {
 
-  render() {
-    const { classes } = this.props;
+//         let response = await fetch(`https://api.github.com/users/${userLogin}`)
+//         let response2 = await fetch(`https://api.github.com/users/${userLogin}/repos`)
 
-    return (
-      <div>
-        <Typography gutterBottom>Click to get the full Modal experience!</Typography>
-        <Button onClick={this.handleOpen}>Open Modal</Button>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.open}
-          onClose={this.handleClose}
-        >
-          <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Text in a modal
-            </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-            <SimpleModalWrapped />
-          </div>
-        </Modal>
-      </div>
-    );
-  }
-}
+//         const user = await response.json()
+//         const userRepos = await response2.json()
 
-SimpleModal.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+//         this.setState({
+//             open: true,
+//             user: user.bio,
+//             userRepos: userRepos
 
-// We need an intermediary variable for handling the recursive nesting.
-const SimpleModalWrapped = withStyles(styles)(SimpleModal);
+//         }, console.log(user, 'hello'))
+//     }
 
-export default SimpleModalWrapped;
+//     handleClose = () => {
+//         this.setState({ open: false })
+//     }
+
+//   render() {
+//     const { classes } = this.props;
+
+//     // let repos = this.state.userRepos&&
+//     //             this.state.userRepos.map(x => {
+//     //                 return (
+//     //                     <div key={x.id}>
+//     //                         <p>{x.full_name}</p>
+//     //                         <p>{x.language}</p>
+//     //                         <p>{x.open_issues}</p>
+//     //                         <p>{x.watchers}</p>
+//     //                         <p>{x.forks}</p>
+//     //                     </div>
+
+//     //                 )
+//     //             })
+
+//     return (
+//       <div>
+//         <Button onClick={() => this.handleOpen(this.props.username)}>
+//             {this.props.username}
+//             <img src={this.props.image} alt="userImage" height="100px" width="100px" />
+//         </Button>
+
+//         <Modal
+//           aria-labelledby="simple-modal-title"
+//           aria-describedby="simple-modal-description"
+//           open={this.state.open}
+//           onClose={this.handleClose}
+//         >
+//           <div style={getModalStyle()} className={classes.paper}>
+//             <img src={this.props.image} alt="userImage" height="100px" width="100px" />
+//             <Typography variant="title" id="modal-title">
+//             {this.state.user}
+
+
+//             </Typography>
+// {/*            <ModalWrapped />
+// */}          </div>
+//         </Modal>
+//       </div>
+//     );
+//   }
+// }
+
+// User.propTypes = {
+//   classes: PropTypes.object.isRequired,
+// };
+
+// const ModalWrapped = withStyles(styles)(User);
+
+// export default ModalWrapped;
