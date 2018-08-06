@@ -19,7 +19,9 @@ export default class App extends Component {
 
         //get users from github
         this.getUsers()
-        // this.loggedIn()
+
+        //if there is a code parameter, perform a user login
+        this.logIn()
     }
 
     getUsers = async() => {
@@ -34,44 +36,53 @@ export default class App extends Component {
         this.setState({users: users}, console.log(users))
     }
 
-    // loggedIn = () => {
-    //     if(/code=/.test(window.location.href))
-    //     {
-    //         //in the url, locate and grab everything after code=
-    //         let code = window.location.href.match(/\?code=(.*)/)[1];
 
-    //          request
-    //             .post('https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token')
-    //             .send({
-    //                 client_id: '1f8d20a913b00db6f9e3',
-    //                 client_secret: '51b39ca726f4ab4d774bc6b62cdfa61e6b91fff9',
-    //                 code: code
-    //             })
-    //             .set('Accept', 'application/json')
-    //             .then(async res => {
-    //               this.setState({userToken: res.body.access_token})
-    //                 let response3 = await fetch('https://api.github.com/user', {
-    //                     method: 'GET',
-    //                     headers: {
-    //                       'Accept': 'application/json',
-    //                       'Content-Type': 'application/json',
-    //                       Authorization: 'Bearer ' + this.state.userToken,
-    //                     },
-    //                   });
-    //                   let responseJson = await response3.json();
-    //                   console.log(responseJson)
-    //             })
-    //             .catch(err => console.log(err))
+    //perform user github oauth
+    logIn = () => {
 
+        //if the url contains a code parameter
+        if(/code=/.test(window.location.href))
+        {
+            //locate and grab everything after code=
+            let code = window.location.href.match(/\?code=(.*)/)[1];
 
-    //     }
-    // }
+            //perform a post request in order to receive a access token to identify users
+            request
+                .post('https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token')
+                .send({
+                    client_id: '1f8d20a913b00db6f9e3',
+                    client_secret: '51b39ca726f4ab4d774bc6b62cdfa61e6b91fff9',
+                    code: code
+                })
+                .set('Accept', 'application/json')
+                .then(async res => {
+
+                    //set state with access token
+                    this.setState({userToken: res.body.access_token})
+
+                    //fetch authenticated user data
+                    let response3 = await fetch('https://api.github.com/user', {
+                        method: 'GET',
+                        headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                          Authorization: 'Bearer ' + this.state.userToken,
+                        },
+                    });
+
+                    //conver to json
+                    let responseJson = await response3.json();
+                    console.log(responseJson)
+                })
+                .catch(err => console.log(err))
+        }
+    }
 
     render() {
 
         let output = this.state.users?
             this.state.users.map(x => {
-                return(
+                return (
                    <div key={x.id}>
                         <User username={x.login} image={x.avatar_url} auth={this.state.userToken} />
                     </div>
