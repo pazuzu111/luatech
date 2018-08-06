@@ -39,8 +39,7 @@ export default class App extends Component {
 
 
     //perform user github oauth
-    logIn = () => {
-
+    logIn = (e) => {
         //if the url contains a code parameter
         if(/code=/.test(window.location.href))
         {
@@ -59,7 +58,11 @@ export default class App extends Component {
                 .then(async res => {
 
                     //set state with access token
-                    this.setState({userToken: res.body.access_token})
+                    this.setState({
+                        userToken: res.body.access_token
+                    })
+                    localStorage.setItem("token", res.body.access_token);
+
 
                     //fetch authenticated user data
                     let response3 = await fetch('https://api.github.com/user', {
@@ -67,7 +70,7 @@ export default class App extends Component {
                         headers: {
                           'Accept': 'application/json',
                           'Content-Type': 'application/json',
-                          Authorization: 'Bearer ' + this.state.userToken,
+                          'Authorization': 'Bearer ' + res.body.access_token,
                         },
                     });
 
@@ -97,14 +100,17 @@ export default class App extends Component {
 
         return (
             <div className="App">
-                <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3"> login </a>
-                {this.state.userToken && this.state.authUser&&
+                <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
+                {this.state.userToken && this.state.authUser?
                     <User
                         username={this.state.authUser.login}
                         image={this.state.authUser.avatar_url}
-                        auth={this.state.userToken}
+                        token={this.state.userToken}
                         authUser={this.state.authUser}
                     />
+                    :
+                    null
+
                 }
 
                                 {output}

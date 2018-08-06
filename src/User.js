@@ -42,6 +42,8 @@ class User extends React.Component {
         };
     }
 
+
+
     handleOpen = async userLogin => {
 
         //fetch single user data along with repos that belong to that user
@@ -67,9 +69,41 @@ class User extends React.Component {
     }
 
 
-    handleChange = (id) => {
+    editBio = async (e) => {
+        e.preventDefault()
+
+         let response4 = await fetch('https://api.github.com/user', {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            body: JSON.stringify({bio: this.bio.value})
+        })
+        let responseJson = await response4.json();
+        this.setState({userBio: responseJson.bio})
 
     }
+
+    getAuthUser = async () => {
+
+         let response3 = await fetch('https://api.github.com/user', {
+                        method: 'GET',
+                        headers: {
+                          'Accept': 'application/json',
+                          'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                    });
+
+                    //convert to json
+                    let responseJson = await response3.json();
+
+                    console.log(responseJson, 'fdsar')
+
+    }
+
+
 
   render() {
     const { classes } = this.props;
@@ -89,10 +123,12 @@ class User extends React.Component {
                     )
                 })
 
-    let editForm = this.props.authUser&&
+    let editForm = this.props.token&&
                         <div>
-                            <input type="text" placeholder="edit bio" ref={input => this.bio = input} />
-                            <input type="button"  />
+                            <form onSubmit={this.editBio}>
+                              <input ref={input => this.bio = input} />
+                              <input type="submit" value="Submit" />
+                            </form>
                         </div>
 
     return (
