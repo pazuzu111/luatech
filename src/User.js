@@ -42,16 +42,15 @@ class User extends React.Component {
 
     handleOpen = async userLogin => {
 
-//         let response = await fetch(`https://api.github.com/users/${userLogin}`)
+        let response = await fetch(`https://api.github.com/users/${userLogin}`)
 //         let response2 = await fetch(`https://api.github.com/users/${userLogin}/repos`)
 
-//         const user = await response.json()
+        const user = await response.json()
 //         const userRepos = await response2.json()
 
         this.setState({
             open: true,
-            // user: user.bio,
-            // userRepos: userRepos
+            user: user.bio,
 
         }, console.log(user, 'hello'))
     }

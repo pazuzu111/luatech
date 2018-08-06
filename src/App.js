@@ -82,7 +82,7 @@ export default class App extends Component {
 
         return (
             <div className="App">
-                // <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3"> login </a>
+                <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3"> login </a>
                 {output}
             </div>
         )
