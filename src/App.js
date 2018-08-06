@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from './User'
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import request from 'superagent'
 
 import './App.css';
@@ -12,6 +12,7 @@ export default class App extends Component {
         this.state = {
             users: null,
             userToken: null,
+            authUser: []
         }
     }
 
@@ -70,9 +71,12 @@ export default class App extends Component {
                         },
                     });
 
-                    //conver to json
+                    //convert to json
                     let responseJson = await response3.json();
-                    console.log(responseJson)
+                    this.setState({
+                        authUser: responseJson
+                    })
+                    console.log(this.state.authUser, 'auth')
                 })
                 .catch(err => console.log(err))
         }
@@ -84,7 +88,7 @@ export default class App extends Component {
             this.state.users.map(x => {
                 return (
                    <div key={x.id}>
-                        <User username={x.login} image={x.avatar_url} auth={this.state.userToken} />
+                        <User username={x.login} image={x.avatar_url} />
                     </div>
                 )
             })
@@ -94,7 +98,17 @@ export default class App extends Component {
         return (
             <div className="App">
                 <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3"> login </a>
-                {output}
+                {this.state.userToken && this.state.authUser&&
+                    <User
+                        username={this.state.authUser.login}
+                        image={this.state.authUser.avatar_url}
+                        auth={this.state.userToken}
+                        authUser={this.state.authUser}
+                    />
+                }
+
+                                {output}
+
             </div>
         )
     }
