@@ -1,11 +1,29 @@
 import React, { Component } from 'react';
 import User from './User'
-import {Redirect} from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+
 import request from 'superagent'
 
 import './App.css';
 
-export default class App extends Component {
+     const styles = theme => ({
+                      root: {
+                        flexGrow: 1,
+                      },
+                      paper: {
+                        padding: theme.spacing.unit * 2,
+                        textAlign: 'left',
+                        color: 'grey',
+                        backgroundColor: 'grey',
+                        border: 'none',
+                        boxShadow: theme.shadows[5]
+                      },
+                    });
+
+class App extends Component {
     constructor(props) {
         super(props)
 
@@ -15,49 +33,24 @@ export default class App extends Component {
         this.state = {
             users: null,
             authUser: null,
-            userToken: this.token,
-            signedIn: false
+            userToken: this.token || null,
         }
     }
 
     componentDidMount() {
             console.log(this.token, 'token')
 
-
-        //check for auther=nticate user
-        // this.isAuth()
-
         //get users from github
-        // this.getUsers()
+        this.getUsers()
 
         //if there is a code parameter, perform a user login
         this.logIn()
     }
 
-    // isAuth = async () => {
-
-    //      let response3 = await fetch('https://api.github.com/user', {
-    //                             method: 'GET',
-    //                             headers: {
-    //                               'Accept': 'application/json',
-    //                               'Content-Type': 'application/json',
-    //                               'Authorization': 'Bearer ' +  res.body.access_token
-    //                             },
-    //                           })
-
-    //     //convert to json
-    //     let responseJson = await response3.json();
-
-    //     //save authenticated user data to state
-    //     this.setState({
-    //         authUser: responseJson
-    //     })
-    // }
-
     getUsers = async() => {
 
         //make get request to github api to fetch list of users
-        let response = await fetch(`https://api.github.com/users?since=1&per_page=10`)
+        let response = await fetch(`https://api.github.com/users?since=0&per_page=10`)
 
         //convert to json
         const users = await response.json();
@@ -142,36 +135,46 @@ export default class App extends Component {
 
     render() {
 
+
+    const { classes } = this.props;
+
         //render list of users
         let output = this.state.users&&
                         this.state.users.map(x => {
                             return (
-                               <div key={x.id}>
-                                    <User username={x.login} image={x.avatar_url} />
-                                </div>
+                               <Grid item md={4} key={x.id}>
+                                    <User username={x.login} image={x.avatar_url} url={x.url} />
+                                </Grid>
                             )
                         })
 
         //render authenticated users profile
-        let userProfile =  this.state.authUser?
-                            <User
-                                username={this.state.authUser.login}
-                                image={this.state.authUser.avatar_url}
-                                authUser={this.state.authUser}
-
-                            />
+        let userProfile =  this.token && this.state.authUser?
+                            <Grid item md={4}>
+                                <User
+                                    username={this.state.authUser.login}
+                                    image={this.state.authUser.avatar_url}
+                                    authUser={this.state.authUser}
+                                />
+                             </Grid>
                             :
                             null
 
         return (
-            <div className="App">
-                <a href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
+            <div className={[classes.root,'App.css']}>
+                <a id='login' href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
 
-                {userProfile}
-                {output}
-
+                <Grid container spacing={24} justify="center">
+                    {userProfile}
+                    {output}
+                </Grid>
             </div>
         )
     }
 }
 
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

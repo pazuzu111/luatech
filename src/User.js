@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -29,9 +32,37 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
+    color: 'black'
   },
+   card: {
+    minWidth: 275,
+    backgroundColor: 'transparent'
+  },
+  authCard: {
+    minWidth: 275,
+    backgroundColor: 'white'
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  login: {
+    '&:hover': {
+      color: 'red'
+    }
+  }
 });
 
+
+//start of component
 class User extends React.Component {
     constructor(props) {
         super(props)
@@ -42,7 +73,6 @@ class User extends React.Component {
             userRepos: null
         };
     }
-
 
     //open modal
     handleOpen = async userLogin => {
@@ -121,12 +151,30 @@ class User extends React.Component {
                             </form>
                         </div>
 
+    let user = !this.props.authUser? classes.card : classes.authCard
+
     return (
       <div>
-        <Button onClick={() => this.handleOpen(this.props.username)}>
-            <h1> {this.props.username} </h1>
+      <Card className={user}>
+        <CardContent>
+          <Typography className={classes.title} color="textSecondary">
             <img src={this.props.image} alt="userImage" height="100px" width="100px" />
-        </Button>
+
+          </Typography>
+
+          <Typography variant="headline" component="h2" color="secondary">
+            {this.props.username}
+          </Typography>
+
+                      <a href={this.props.username}> check out my github </a>
+
+
+        </CardContent>
+
+        <CardActions>
+          <Button className={classes.login} size="small" onClick={() => this.handleOpen(this.props.username)}> more info </Button>
+        </CardActions>
+      </Card>
 
         <Modal
           aria-labelledby="simple-modal-title"
@@ -136,6 +184,7 @@ class User extends React.Component {
         >
             <div style={getModalStyle()} className={classes.paper}>
                 <img src={this.props.image} alt="userImage" height="100px" width="100px" />
+
                 <Typography variant="title" id="modal-title">
                     Bio: {this.state.userBio}
 
