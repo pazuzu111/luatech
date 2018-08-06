@@ -38,12 +38,13 @@ class User extends React.Component {
 
         this.state = {
             open: false,
-            user: null,
+            userBio: null,
+            userRepos: null
         };
     }
 
 
-
+    //open modal
     handleOpen = async userLogin => {
 
         //fetch single user data along with repos that belong to that user
@@ -68,46 +69,34 @@ class User extends React.Component {
         this.setState({ open: false })
     }
 
-
+    //save new bio
     editBio = async (e) => {
+
+        //prevent default behavior -> page reload
         e.preventDefault()
 
-         let response4 = await fetch('https://api.github.com/user', {
+        //make patch request to authenticated user endpoint
+        let response4 = await fetch('https://api.github.com/user', {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + localStorage.getItem("token"),
+                'Authorization': 'Bearer ' + localStorage.getItem("token"),
             },
             body: JSON.stringify({bio: this.bio.value})
         })
+
+        //convert to json
         let responseJson = await response4.json();
+
+        //set new state
         this.setState({userBio: responseJson.bio})
-
     }
-
-    getAuthUser = async () => {
-
-         let response3 = await fetch('https://api.github.com/user', {
-                        method: 'GET',
-                        headers: {
-                          'Accept': 'application/json',
-                          'Authorization': 'Bearer ' + localStorage.getItem("token")
-                        },
-                    });
-
-                    //convert to json
-                    let responseJson = await response3.json();
-
-                    console.log(responseJson, 'fdsar')
-
-    }
-
-
 
   render() {
     const { classes } = this.props;
 
+    //check for repo data and render
     let repos = this.state.userRepos&&
                 this.state.userRepos.map(x => {
                     return (
@@ -123,7 +112,8 @@ class User extends React.Component {
                     )
                 })
 
-    let editForm = this.props.token&&
+    //Check for token and render
+    let editForm = this.props.authUser&&
                         <div>
                             <form onSubmit={this.editBio}>
                               <input ref={input => this.bio = input} />
@@ -134,7 +124,7 @@ class User extends React.Component {
     return (
       <div>
         <Button onClick={() => this.handleOpen(this.props.username)}>
-            {this.props.username}
+            <h1> {this.props.username} </h1>
             <img src={this.props.image} alt="userImage" height="100px" width="100px" />
         </Button>
 
