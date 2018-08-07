@@ -134,6 +134,7 @@ class App extends Component {
                                     username={this.state.authUser.login}
                                     image={this.state.authUser.avatar_url}
                                     authUser={this.state.authUser}
+                                    url={this.state.authUser.html_url}
                                 />
                             </Grid>
                             :
