@@ -112,7 +112,7 @@ class User extends React.Component {
                 {this.props.username}
             </Typography>
 
-            <a href={this.props.username}> check out my github </a>
+            <a href={this.props.url}> check out my github </a>
         </CardContent>
 
         <CardActions>
