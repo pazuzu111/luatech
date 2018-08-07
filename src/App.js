@@ -71,7 +71,7 @@ class App extends Component {
 
             /*~~~~~~~~~~~~~~~~~~ ACQUIRE ACCESS TOKEN ~~~~~~~~~~~~~~~*/
 
-            //perform a post request in order to receive an access token to identify a user
+            //perform a post request in order to receive an access token to identify user
             request
                 .post('https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token')
                 .send({
@@ -82,7 +82,7 @@ class App extends Component {
                 .set('Accept', 'application/json')
                 .then(async res => {
 
-                    /*~~~~~~~~~~~~~~~~~~ USE ACCESS TOKEN ~~~~~~~~~~~~~~~*/
+                    /*~~~~~~~~~~~~~ USE ACCESS TOKEN FOR AUTH ~~~~~~~~~~~~~~~*/
 
                      //save token to localstorage
                     localStorage.setItem('token', res.body.access_token);
@@ -109,6 +109,8 @@ class App extends Component {
         }
         else
         {
+            /*~~~~~~~~~~~~ USER ALREADY LOGGED IN! ~~~~~~~~~~~~~~*/
+
             //fetch authenticated user data
             let response5 = await fetch('https://api.github.com/user', {
                                     method: 'GET',
