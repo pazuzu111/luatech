@@ -4,31 +4,32 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
-
 import request from 'superagent'
 
 import './App.css';
 
-     const styles = theme => ({
-                      root: {
-                        flexGrow: 1,
-                      },
-                      paper: {
-                        padding: theme.spacing.unit * 2,
-                        textAlign: 'left',
-                        color: 'grey',
-                        backgroundColor: 'grey',
-                        border: 'none',
-                        boxShadow: theme.shadows[5]
-                      },
-                    });
+//styles for grid and paper component
+const styles = theme => ({
+      root: {
+        flexGrow: 1,
+      },
+      paper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'left',
+        color: 'grey',
+        backgroundColor: 'grey',
+        border: 'none',
+        boxShadow: theme.shadows[5]
+      },
+    });
 
+
+//start of component
 class App extends Component {
     constructor(props) {
         super(props)
 
         this.token = localStorage.getItem("token")
-
 
         this.state = {
             users: null,
@@ -38,7 +39,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-            console.log(this.token, 'token')
 
         //get users from github
         this.getUsers()
@@ -59,7 +59,8 @@ class App extends Component {
         this.setState({users: users})
     }
 
-    //perform github oauth
+    //perform github oauth request -> should be done on server!,
+    // done on client for demonstrational purposes only
     logIn = async e => {
 
         //if the url contains a code parameter
@@ -75,7 +76,7 @@ class App extends Component {
                 .post('https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token')
                 .send({
                     client_id: '1f8d20a913b00db6f9e3',
-                    client_secret: '51b39ca726f4ab4d774bc6b62cdfa61e6b91fff9',
+                    client_secret: '51b39ca726f4ab4d774bc6b62cdfa61e6b91fff9',//should be hidden in .env file
                     code: code,
                 })
                 .set('Accept', 'application/json')
@@ -85,9 +86,6 @@ class App extends Component {
 
                      //save token to localstorage
                     localStorage.setItem('token', res.body.access_token);
-
-
-                    this.setState({userToken: res.body.access_token})
 
                     //fetch authenticated user data
                     let response3 = await fetch('https://api.github.com/user', {
@@ -102,10 +100,7 @@ class App extends Component {
                     //convert to json
                     let responseJson = await response3.json();
 
-                    localStorage.setItem("user", responseJson);
-
-
-                    //save authenticated user data to state
+                    //save authenticated user data to state & redirect to home
                     this.setState({
                         authUser: responseJson
                     } , () => {return window.location.href = '/'})
@@ -114,29 +109,27 @@ class App extends Component {
         }
         else
         {
-            console.log(this.token, 'token reload')
-             let response5 = await fetch('https://api.github.com/user', {
-                                method: 'GET',
-                                headers: {
-                                  'Accept': 'application/vnd.github.v3+json',
-                                  'Authorization': 'Bearer ' +  this.token
-                                },
-                              })
+            //fetch authenticated user data
+            let response5 = await fetch('https://api.github.com/user', {
+                                    method: 'GET',
+                                    headers: {
+                                      'Accept': 'application/vnd.github.v3+json',
+                                      'Authorization': 'Bearer ' +  this.token
+                                    },
+                                  })
+            //convert to json
+            let responseJson2 = await response5.json();
 
-                //convert to json
-                let responseJson2 = await response5.json();
-
-                //save authenticated user data to state
-                this.setState({
-                    authUser: responseJson2
-                }, console.log(this.state.authUser, 'user reloaded'))
+            //save authenticated user data to state
+            this.setState({
+                authUser: responseJson2
+            })
         }
     }
 
     render() {
 
-
-    const { classes } = this.props;
+        const { classes } = this.props;
 
         //render list of users
         let output = this.state.users&&
@@ -148,7 +141,7 @@ class App extends Component {
                             )
                         })
 
-        //render authenticated users profile
+        //render authenticated user's profile
         let userProfile =  this.token && this.state.authUser?
                             <Grid item md={4}>
                                 <User
@@ -156,20 +149,20 @@ class App extends Component {
                                     image={this.state.authUser.avatar_url}
                                     authUser={this.state.authUser}
                                 />
-                             </Grid>
+                            </Grid>
                             :
                             null
 
-        return (
-            <div className={[classes.root,'App.css']}>
-                <a id='login' href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
+    return (
+        <div className={[classes.root,'App.css']}>
+            <a id='login' href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
 
-                <Grid container spacing={24} justify="center">
-                    {userProfile}
-                    {output}
-                </Grid>
-            </div>
-        )
+            <Grid container spacing={24} justify="center">
+                {userProfile}
+                {output}
+            </Grid>
+        </div>
+    )
     }
 }
 

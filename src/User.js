@@ -8,22 +8,18 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
 
+//experimenting with different styling patterns
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
 
   return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+    top: `25%`,
+    left: `35%`,
     overflow: 'scroll'
   };
 }
 
+//styles for material components
 const styles = theme => ({
   paper: {
     position: 'absolute',
@@ -128,9 +124,9 @@ class User extends React.Component {
 
     //check for repo data and render
     let repos = this.state.userRepos&&
-                this.state.userRepos.map(x => {
+                this.state.userRepos.map((x,i) => {
                     return (
-                        <div key={x.id}>
+                        <div key={x.i}>
                             <h1> Repo # {x.id}</h1>
                             <p>Name: {x.name}</p>
                             <p>Lanaguage: {x.language}</p>
@@ -138,7 +134,6 @@ class User extends React.Component {
                             <p>Watchers: {x.watchers}</p>
                             <p>Forks: {x.forks}</p>
                         </div>
-
                     )
                 })
 
@@ -151,24 +146,23 @@ class User extends React.Component {
                             </form>
                         </div>
 
+    //if a user is logged in, their card will be white
+    //otherwise is will be transparent
     let user = !this.props.authUser? classes.card : classes.authCard
 
     return (
       <div>
       <Card className={user}>
         <CardContent>
-          <Typography className={classes.title} color="textSecondary">
-            <img src={this.props.image} alt="userImage" height="100px" width="100px" />
+            <Typography className={classes.title} color="textSecondary">
+                <img src={this.props.image} alt="userImage" height="100px" width="100px" />
+            </Typography>
 
-          </Typography>
+            <Typography variant="headline" component="h2" color="secondary">
+                {this.props.username}
+            </Typography>
 
-          <Typography variant="headline" component="h2" color="secondary">
-            {this.props.username}
-          </Typography>
-
-                      <a href={this.props.username}> check out my github </a>
-
-
+            <a href={this.props.username}> check out my github </a>
         </CardContent>
 
         <CardActions>
