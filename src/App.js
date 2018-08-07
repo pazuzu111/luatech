@@ -143,7 +143,7 @@ class App extends Component {
         <div className={[classes.root,'App.css']}>
             <a id='login' href="https://github.com/login/oauth/authorize?client_id=1f8d20a913b00db6f9e3&scope=user"> login </a>
 
-            <Grid container spacing={24} justify="center">
+            <Grid container spacing={24} justify="left">
                 {userProfile}
                 {output}
             </Grid>
