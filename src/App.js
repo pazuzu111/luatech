@@ -8,23 +8,7 @@ import request from 'superagent'
 
 import './App.css';
 
-//styles for grid and paper component
-const styles = theme => ({
-      root: {
-        flexGrow: 1,
-      },
-      paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'left',
-        color: 'grey',
-        backgroundColor: 'grey',
-        border: 'none',
-        boxShadow: theme.shadows[5]
-      },
-    });
 
-
-//start of component
 class App extends Component {
     constructor(props) {
         super(props)
@@ -171,5 +155,20 @@ class App extends Component {
 App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+//styles for grid and paper component
+const styles = theme => ({
+      root: {
+        flexGrow: 1,
+      },
+      paper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'left',
+        color: 'grey',
+        backgroundColor: 'grey',
+        border: 'none',
+        boxShadow: theme.shadows[5]
+      },
+    });
 
 export default withStyles(styles)(App);

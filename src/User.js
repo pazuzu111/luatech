@@ -9,56 +9,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 
 
-//experimenting with different styling patterns
-function getModalStyle() {
-
-  return {
-    top: `25%`,
-    left: `35%`,
-    overflow: 'scroll'
-  };
-}
-
-//styles for material components
-const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    height: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-    color: 'black'
-  },
-   card: {
-    minWidth: 275,
-    backgroundColor: 'transparent'
-  },
-  authCard: {
-    minWidth: 275,
-    backgroundColor: 'white'
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    marginBottom: 16,
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  login: {
-    '&:hover': {
-      color: 'red'
-    }
-  }
-});
-
-
-//start of component
 class User extends React.Component {
     constructor(props) {
         super(props)
@@ -142,7 +92,7 @@ class User extends React.Component {
                         <div>
                             <form onSubmit={this.editBio}>
                               <input ref={input => this.bio = input} />
-                              <input type="submit" value="Submit" />
+                              <input type="submit" value="submit" />
                             </form>
                         </div>
 
@@ -181,8 +131,8 @@ class User extends React.Component {
 
                 <Typography variant="title" id="modal-title">
                     Bio: {this.state.userBio}
-
-                    {editForm}
+                    <br/>
+                    Edit Bio: {editForm}
                 </Typography>
                 {repos}
             </div>
@@ -195,6 +145,54 @@ class User extends React.Component {
 User.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+//experimenting with different styling patterns
+function getModalStyle() {
+
+  return {
+    top: `25%`,
+    left: `35%`,
+    overflow: 'scroll'
+  };
+}
+
+//styles for material components
+const styles = theme => ({
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    height: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    color: 'black'
+  },
+   card: {
+    minWidth: 275,
+    backgroundColor: 'transparent'
+  },
+  authCard: {
+    minWidth: 275,
+    backgroundColor: 'white'
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  login: {
+    '&:hover': {
+      color: 'red'
+    }
+  }
+});
 
 const ModalWrapped = withStyles(styles)(User);
 
