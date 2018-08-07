@@ -122,7 +122,7 @@ class App extends Component {
                         this.state.users.map(x => {
                             return (
                                <Grid item md={4} key={x.id}>
-                                    <User username={x.login} image={x.avatar_url} url={x.url} />
+                                    <User username={x.login} image={x.avatar_url} url={x.html_url} />
                                 </Grid>
                             )
                         })
